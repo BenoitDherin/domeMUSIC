@@ -1,6 +1,6 @@
-drumapp:
+web:
   restart: always
-  build: ./drumapp
+  build: ./web
   expose:
     - "8000"
   links:
@@ -12,27 +12,26 @@ drumapp:
 
 nginx:
   restart: always
-  build: ./nginx
+  build: ./nginx/
   ports:
     - "80:80"
   volumes:
     - /www/static
   volumes_from:
-    - drumapp
+    - web
   links:
-    - drumapp:drumapp
+    - web:web
 
 data:
-  restart: no
   image: postgres:latest
   volumes:
     - /var/lib/postgresql
-  command: true
+  command: "true"
 
 postgres:
   restart: always
   image: postgres:latest
-  volumes_from: 
+  volumes_from:
     - data
-   ports:
+  ports:
     - "5432:5432"
